@@ -1,6 +1,6 @@
 import pandas as pd
 
-def backtest(df, symbol, start_session, end_session, balance, risk, rr, commision, periodic_result="yearly", multi_time_frame=False, higher_timeframe=None, lower_timeframe=None, start_period=None, end_period=None, online=False):
+def backtest(df, symbol, start_session, end_session, balance, risk, rr, commision, periodic_result="yearly", multi_time_frame=False, higher_timeframe=None, lower_timeframe=None, forward_candle=1, start_period=None, end_period=None, online=False):
     
     symbols = ['EURUSD', 'GBPUSD', 'AUDUSD', 'NZDUSD', 'USDCAD', 'USDCHF', 'EURGBP', 'EURAUD', 'EURNZD', 'EURCAD', 'EURCHF', 'GBPNZD', 'GBPAUD', 'GBPCAD', 'GBPCHF', 'CADCHF', 'NZDCAD', 'AUDCAD', 'AUDNZD', 'AUDCHF']
 
@@ -13,23 +13,6 @@ def backtest(df, symbol, start_session, end_session, balance, risk, rr, commisio
 
     if multi_time_frame:
         df = multi_timeframe(symbol, df, lower_timeframe, start_period, end_period, online)
-
-        if higher_timeframe == 'h4' and lower_timeframe == 'm1':
-            forward = 240
-        elif higher_timeframe == 'h4' and lower_timeframe == 'm5':
-            forward = 48
-        elif higher_timeframe == 'h1' and lower_timeframe == 'm1':
-            forward = 60
-        elif higher_timeframe == 'h1' and lower_timeframe == 'm5':
-            forward = 12
-        elif higher_timeframe == 'm5' and lower_timeframe == 'm1':
-            forward = 5
-        elif higher_timeframe == 'm3' and lower_timeframe == 'm1':
-            forward = 3
-        else:
-            raise ValueError('Higher and Lower Time Frame are not correctly set!!!')
-    else:
-        forward = 1
 
     df['status'] = 0
     df['pip_value'] = pip_value
@@ -47,16 +30,16 @@ def backtest(df, symbol, start_session, end_session, balance, risk, rr, commisio
     
     for i in all_positions:
         if df.at[i, 'signal'] == 1:
-            new_df = df.iloc[i+forward:]
+            new_df = df.iloc[i+forward_candle:]
             tp = df.at[i, 'buy_tp']
             sl = df.at[i, 'buy_sl']
-            specific_datetime = df.at[i+forward, 'time'].time()
+            specific_datetime = df.at[i+forward_candle, 'time'].time()
             open_date = df.at[i, 'time']
 
             if specific_datetime <= end_session and specific_datetime >= start_session:
                 count_positions += 1
 
-                o = df.at[i+forward, 'open'] + df.at[i+forward, 'spread'] / df.at[i+forward, 'pip_value']
+                o = df.at[i+forward_candle, 'open'] + df.at[i+forward_candle, 'spread'] / df.at[i+forward_candle, 'pip_value']
                 lot_size = volume_calculation(symbol, o, balance, risk)
                 df.at[i, 'lot_size'] = lot_size
 
@@ -105,16 +88,16 @@ def backtest(df, symbol, start_session, end_session, balance, risk, rr, commisio
                         continue
 
         elif df.at[i, 'signal'] == -1:
-            new_df = df.iloc[i+forward:]
+            new_df = df.iloc[i+forward_candle:]
             tp = df.at[i, 'sell_tp']
             sl = df.at[i, 'sell_sl']
-            specific_datetime = df.at[i+forward, 'time'].time()
+            specific_datetime = df.at[i+forward_candle, 'time'].time()
             open_date = df.at[i, 'time']
 
             if specific_datetime <= end_session and specific_datetime >= start_session:
                 count_positions += 1
 
-                o = df.at[i+forward, 'open']
+                o = df.at[i+forward_candle, 'open']
                 lot_size = volume_calculation(symbol, o, balance, risk)
                 df.at[i, 'lot_size'] = lot_size
 
