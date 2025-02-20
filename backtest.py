@@ -1,6 +1,6 @@
 import pandas as pd
 
-def backtest(df, symbol, start_session, end_session, balance, risk, rr, commision, periodic_result="yearly", multi_time_frame=False, higher_timeframe=None, lower_timeframe=None, forward_candle=1, start_period=None, end_period=None, online=False):
+def backtest(df, symbol, start_session, end_session, balance, risk, rr, commision, periodic_result="yearly", multi_time_frame=False, lower_timeframe=None, forward_candle=1, start_period=None, end_period=None, online=False):
     
     symbols = ['EURUSD', 'GBPUSD', 'AUDUSD', 'NZDUSD', 'USDCAD', 'USDCHF', 'EURGBP', 'EURAUD', 'EURNZD', 'EURCAD', 'EURCHF', 'GBPNZD', 'GBPAUD', 'GBPCAD', 'GBPCHF', 'CADCHF', 'NZDCAD', 'AUDCAD', 'AUDNZD', 'AUDCHF']
 
