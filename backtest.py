@@ -10,6 +10,8 @@ def backtest(df, symbol, start_session, end_session, balance, risk, rr, commisio
         pip_value = 1000
     elif "XAUUSD" == symbol.upper():
         pip_value = 100
+    else:
+        raise ValueError("Symbol is not defined!!!")
 
     if multi_time_frame:
         df = multi_timeframe(symbol, df, lower_timeframe, start_period, end_period)
@@ -84,8 +86,6 @@ def backtest(df, symbol, start_session, end_session, balance, risk, rr, commisio
                         close_date = j.time
                         open_close_positions.append(close_date - open_date)
                         break
-                    else:
-                        continue
 
         elif df.at[i, 'signal'] == -1:
             new_df = df.iloc[i+forward_candle:]
@@ -142,8 +142,6 @@ def backtest(df, symbol, start_session, end_session, balance, risk, rr, commisio
                         close_date = j.time
                         open_close_positions.append(close_date - open_date)
                         break
-                    else:
-                        continue
 
     df['time'] = pd.to_datetime(df['time'])
 
