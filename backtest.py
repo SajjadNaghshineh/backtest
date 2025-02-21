@@ -1,6 +1,6 @@
 import pandas as pd
 
-def backtest(df, symbol, start_session, end_session, balance, risk, rr, commision, periodic_result="yearly", multi_time_frame=False, lower_timeframe=None, forward_candle=1, start_period=None, end_period=None, online=False):
+def backtest(df, symbol, start_session, end_session, balance, risk, rr, commision, periodic_result="yearly", multi_time_frame=False, lower_timeframe=None, forward_candle=1, start_period=None, end_period=None):
     
     symbols = ['EURUSD', 'GBPUSD', 'AUDUSD', 'NZDUSD', 'USDCAD', 'USDCHF', 'EURGBP', 'EURAUD', 'EURNZD', 'EURCAD', 'EURCHF', 'GBPNZD', 'GBPAUD', 'GBPCAD', 'GBPCHF', 'CADCHF', 'NZDCAD', 'AUDCAD', 'AUDNZD', 'AUDCHF']
 
@@ -12,7 +12,7 @@ def backtest(df, symbol, start_session, end_session, balance, risk, rr, commisio
         pip_value = 100
 
     if multi_time_frame:
-        df = multi_timeframe(symbol, df, lower_timeframe, start_period, end_period, online)
+        df = multi_timeframe(symbol, df, lower_timeframe, start_period, end_period)
 
     df['status'] = 0
     df['pip_value'] = pip_value
@@ -217,9 +217,7 @@ def volume_calculation(symbol, price, balance, risk):
     
     return round(lot_size, 2)
 
-def multi_timeframe(symbol, higher_df, lower_timeframe, start, end, online=False):
-    if online:
-        pass
+def multi_timeframe(symbol, higher_df, lower_timeframe, start, end):
     lower_df = pd.read_csv(f'files/{symbol}_{lower_timeframe}.csv')
     lower_df['time'] = pd.to_datetime(lower_df['time'])
     lower_df.set_index('time', inplace=True)
