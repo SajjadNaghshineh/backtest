@@ -1,6 +1,6 @@
 import pandas as pd
 
-def backtest(df, symbol, start_session, end_session, balance, risk, rr, commision, periodic_result="yearly", multi_time_frame=False, lower_timeframe=None, forward_candle=1, start_period=None, end_period=None, result_to_csv=False, path=None):
+def backtest(df, symbol, start_session, end_session, balance, risk, rr, commision, periodic_result="yearly", multi_time_frame=False, lower_timeframe=None, forward_candle=1, start_period=None, end_period=None, export_csv=False, path=None):
     
     symbols = ['EURUSD', 'GBPUSD', 'AUDUSD', 'NZDUSD', 'USDCAD', 'USDCHF', 'EURGBP', 'EURAUD', 'EURNZD', 'EURCAD', 'EURCHF', 'GBPNZD', 'GBPAUD', 'GBPCAD', 'GBPCHF', 'CADCHF', 'NZDCAD', 'AUDCAD', 'AUDNZD', 'AUDCHF']
 
@@ -145,9 +145,9 @@ def backtest(df, symbol, start_session, end_session, balance, risk, rr, commisio
 
     df['time'] = pd.to_datetime(df['time'])
 
-    if result_to_csv:
+    if export_csv:
         result_df = df[df['status'] != 0]
-        result_df.to_csv(f'{path}.csv')
+        result_df.to_csv(f'{path}.csv', index=False)
     
     if periodic_result == 'yearly':
         df['year'] = df['time'].dt.year
@@ -360,7 +360,7 @@ def count_consecutive_occurrences(data, target):
             
 #     return extrema
 
-# def backtest(df, symbol, start_session, end_session, balance, risk, rr, commision, periodic_result="yearly", multi_time_frame=False, lower_timeframe=None, forward_candle=1, start_period=None, end_period=None, result_to_csv=False, path=None):
+# def backtest(df, symbol, start_session, end_session, balance, risk, rr, commision, periodic_result="yearly", multi_time_frame=False, lower_timeframe=None, forward_candle=1, start_period=None, end_period=None, export_csv=False, path=None):
     
 #     symbols = ['EURUSD', 'GBPUSD', 'AUDUSD', 'NZDUSD', 'USDCAD', 'USDCHF', 'EURGBP', 'EURAUD', 'EURNZD', 'EURCAD', 'EURCHF', 'GBPNZD', 'GBPAUD', 'GBPCAD', 'GBPCHF', 'CADCHF', 'NZDCAD', 'AUDCAD', 'AUDNZD', 'AUDCHF']
 
@@ -540,9 +540,9 @@ def count_consecutive_occurrences(data, target):
 
 #     df['time'] = pd.to_datetime(df['time'])
     
-#     if result_to_csv:
+#     if export_csv:
 #         result_df = df[df['status'] != 0]
-#         result_df.to_csv(f'{path}.csv')
+#         result_df.to_csv(f'{path}.csv', index=False)
 
 #     if periodic_result == 'yearly':
 #         df['year'] = df['time'].dt.year
